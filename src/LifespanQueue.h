@@ -42,7 +42,7 @@ template <class T> class LifespanQueue {
         int blocked_push, blocked_pop;
 
         // Funzione controlla se vi sono messaggi scaduti nella coda
-        void expired(void);
+        bool expired(void);
 
     public:
         // Costruttore
@@ -74,9 +74,7 @@ template <class T> class LifespanQueue {
         void bPush(T message) {
             sem_wait(&this->mutex);
 
-            expired();
-
-            while(full()) {
+            while(full() && !expired()) {
                 this->blocked_push++;
                 sem_post(&this->mutex);
                 sem_wait(&this->push_sem);
@@ -100,9 +98,7 @@ template <class T> class LifespanQueue {
         void push(T message) {
             sem_wait(&this->mutex);
 
-            expired();
-
-            if(full()) {
+            if(full() && !expired()) {
                 cout << "Queue is full." << endl;
                 return;
             }
