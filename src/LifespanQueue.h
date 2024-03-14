@@ -42,7 +42,23 @@ template <class T> class LifespanQueue {
         int blocked_push, blocked_pop;
 
         // Funzione controlla se vi sono messaggi scaduti nella coda
-        bool expired(void);
+        bool expired(void) {
+            int previous_tail = this->tail;
+
+            for(int index = this->tail; this->tail != this->head && !empty(); index = (index + 1) % this->dim) {
+                if((chrono::duration_cast<chrono::nanoseconds>(chrono::steady_clock::now() - this->queue[index]->time)) < this->expiration_time)
+                    break;
+                else {
+                    this->tail = (this->tail + 1) % this->dim;
+                    this->count--;
+                }
+            }
+
+            if(previous_tail == this->tail)
+                return false;
+            else
+                return true;
+        }
 
     public:
         // Costruttore
@@ -64,7 +80,7 @@ template <class T> class LifespanQueue {
             this->count = 0;
             
             sem_init(&this->mutex, 0, 1);
-            sem_init(&this->push_sem, 0, dim);
+            sem_init(&this->push_sem, 0, 0);
             sem_init(&this->pop_sem, 0, 0);
 
             this->blocked_push = this->blocked_pop = 0;
@@ -116,8 +132,23 @@ template <class T> class LifespanQueue {
             sem_post(&this->mutex);
         }
 
-        // Preleva un elemento dalla coda
-        T pop(void);
+        // Preleva un elemento dalla coda (bloccante)
+        T bPop(void) {
+            sem_wait(&this->mutex);
+
+
+
+            sem_post(&this->mutex);
+        }
+
+        // Preleva un elemento dalla coda (non bloccante)
+        T pop(void) {
+            sem_wait(&this->mutex);
+
+            
+
+            sem_post(&this->mutex);
+        }
 
         // Controlla se la coda è vuota
         bool empty(void) {
