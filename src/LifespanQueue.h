@@ -196,9 +196,24 @@ template <class T> class LifespanQueue {
             return (this->count == this->dim) ? true : false;
         }
 
-        // Stampa gli elementi validi nell'attuale coda
+        // Stampa gli elementi attuali che compongono la coda
         void printQueue(void) {
+            sem_wait(&this->mutex);
+
+            int index = this->tail;
+
+            if(empty())
+                cout << "Queue is empty" << endl;
+            else
+                for(int i = 0; i < this->count; i++) {
+                    cout << "Elem. n. " << (i + 1) << ":" << endl;
+                    cout << "Message: " << this->queue[index]->message << " | ";
+                    cout << "Elapsed time: " << chrono::duration_cast<chrono::nanoseconds>(chrono::steady_clock::now() - this->queue[index]->time) << endl;
+                    cout << endl;
+                    index = (index + 1) % this->dim;
+                }
             
+            sem_post(&this->mutex);
         }
 };
 
