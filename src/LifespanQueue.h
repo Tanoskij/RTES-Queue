@@ -30,7 +30,7 @@ template <class T> class LifespanQueue {
         size_t count;
 
         // Tempo di scadenza del messaggio
-        int expiration_time;
+        float expiration_time;
 
         // Semaforo di mutua esclusione per l'accesso alla coda
         sem_t mutex;
@@ -45,12 +45,15 @@ template <class T> class LifespanQueue {
         bool expired(void) {
             int previous_tail = this->tail;
 
-            for(int index = this->tail; this->tail != this->head && !empty(); index = (index + 1) % this->dim) {
-                if((chrono::duration_cast<chrono::nanoseconds>(chrono::steady_clock::now() - this->queue[index]->time)) < this->expiration_time)
+            for(int index = this->tail; this->count > 0; index = (index + 1) % this->dim) {
+                //cout << "Elapsed: " << chrono::duration_cast<chrono::nanoseconds>(chrono::steady_clock::now() - this->queue[index].time).count() << endl;
+
+                if((chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - this->queue[index].time).count()) < this->expiration_time)
                     break;
                 else {
                     this->tail = (this->tail + 1) % this->dim;
                     this->count--;
+                    //cout << "expired" << endl;
                 }
             }
 
@@ -69,7 +72,7 @@ template <class T> class LifespanQueue {
             this->dim = dim;
 
             // Converto l'expiration time da ms a ns
-            this->expiration_time = expiration_time * 1000;
+            this->expiration_time = expiration_time;
 
             this->queue = (struct element<T> *)malloc(this->dim * sizeof(struct element<T>));
 
@@ -113,11 +116,12 @@ template <class T> class LifespanQueue {
 
             if(full() && !expired()) {
                 cout << "Queue is full." << endl;
+                sem_post(&this->mutex);
                 return;
             }
 
-            this->queue[this->head]->message = message;
-            this->queue[this->head]->time = chrono::steady_clock::now();
+            this->queue[this->head].message = message;
+            this->queue[this->head].time = chrono::steady_clock::now();
             this->head = (this->head + 1) % this->dim;
             this->count++;
 
@@ -169,10 +173,11 @@ template <class T> class LifespanQueue {
 
             if(empty()) {
                 cout << "Queue is empty." << endl;
+                sem_post(&this->mutex);
                 return NULL;
             }
 
-            T message = this->queue[this->tail]->message;
+            T message = this->queue[this->tail].message;
 
             this->tail = (this->tail + 1) % this->dim;
             this->count--;
@@ -203,12 +208,12 @@ template <class T> class LifespanQueue {
             int index = this->tail;
 
             if(empty())
-                cout << "Queue is empty" << endl;
+                cout << "Impossible to print the queue. Queue is empty." << endl << endl;
             else
                 for(int i = 0; i < this->count; i++) {
                     cout << "Elem. n. " << (i + 1) << ":" << endl;
-                    cout << "Message: " << this->queue[index]->message << " | ";
-                    cout << "Elapsed time: " << chrono::duration_cast<chrono::nanoseconds>(chrono::steady_clock::now() - this->queue[index]->time) << endl;
+                    cout << "Message: " << this->queue[index].message << " | ";
+                    cout << "Elapsed time: " << chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - this->queue[index].time).count() << endl;
                     cout << endl;
                     index = (index + 1) % this->dim;
                 }
