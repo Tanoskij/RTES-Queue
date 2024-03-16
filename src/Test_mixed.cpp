@@ -16,9 +16,9 @@ void *THREAD(void *args)
 
     lq->printQueue();
 
-    usleep(500000 - (rand() % 10000));
+    usleep(505000 - (rand() % 10000));
 
-    int ret = lq->pop();
+    int ret = lq->bPop();
     cout << "Messaggio prelevato: " << ret << endl;
 
     lq->printQueue();

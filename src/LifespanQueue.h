@@ -97,8 +97,8 @@ template <class T> class LifespanQueue {
                 sem_wait(&this->mutex);
             }
 
-            this->queue[this->head]->message = message;
-            this->queue[this->head]->time = chrono::steady_clock::now();
+            this->queue[this->head].message = message;
+            this->queue[this->head].time = chrono::steady_clock::now();
             this->head = (this->head + 1) % this->dim;
             this->count++;
 
@@ -143,7 +143,7 @@ template <class T> class LifespanQueue {
                 expired();
 
                 if(!empty()) {
-                    message = this->queue[this->tail]->message;
+                    message = this->queue[this->tail].message;
                     this->tail = (this->tail + 1) % this->dim;
                     this->count--;
                     break;

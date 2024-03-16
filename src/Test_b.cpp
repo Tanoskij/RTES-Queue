@@ -12,13 +12,13 @@ void *THREAD(void *args)
     usleep((rand() % 100000) + 100000);
     int mex = rand() % 10;
     cout << "Provo ad inserire il messaggio: " << mex << endl;
-    lq->push(mex);
+    lq->bPush(mex);
 
     lq->printQueue();
 
     usleep(500000 - (rand() % 10000));
 
-    int ret = lq->pop();
+    int ret = lq->bPop();
     cout << "Messaggio prelevato: " << ret << endl;
 
     lq->printQueue();
