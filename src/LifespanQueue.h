@@ -30,7 +30,7 @@ template <class T> class LifespanQueue {
         size_t count;
 
         // Tempo di scadenza del messaggio
-        float expiration_time;
+        int expiration_time;
 
         // Semaforo di mutua esclusione per l'accesso alla coda
         sem_t mutex;

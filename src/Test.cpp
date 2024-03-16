@@ -40,7 +40,7 @@ int main()
     cin >> queue_size;
     cout << endl;
 
-    float expiration_time;
+    int expiration_time;
     cout << "Insert message expiration time: ";
     cin >> expiration_time;
     cout << endl;
