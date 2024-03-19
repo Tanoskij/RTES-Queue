@@ -9,6 +9,7 @@ using namespace std;
 
 LifespanQueue<TYPE> *lq;
 
+// Thread che inseriscono messaggi nella coda
 void *WRITER(void *args)
 {
     for(int i = 0; i < 10; i++) {
@@ -27,6 +28,7 @@ void *WRITER(void *args)
     return NULL;
 }
 
+// Thread che prelevano messaggi dalla coda
 void *READER(void *args)
 {
     for (int i = 0; i < 10; i++) {
@@ -44,8 +46,10 @@ void *READER(void *args)
 
 int main()
 {
+    // Numero di writers stabilito dall'utente
     char n_writers[20];
 
+    // Controllo dell'input
     while(1) {
         int i;
 
@@ -68,8 +72,11 @@ int main()
                 break;
     }
 
+    // Numero di readers stabilito dall'utente
     char n_readers[20];
 
+
+    // Controllo dell'input
     while(1) {
         int i;
 
@@ -92,8 +99,10 @@ int main()
                 break;
     }
 
+    // Dimensione coda stabilita dall'utente
     char queue_size[20];
 
+    // Controllo dell'input
     while(1) {
         int i;
 
@@ -116,8 +125,10 @@ int main()
                 break;
     }
 
+    // Tempo di scadenza dei messaggi stabilito dall'utente
     char expiration_time[20];
 
+    // Controllo dell'input
     while(1) {
         int i;
 
@@ -140,6 +151,7 @@ int main()
                 break;
     }
 
+    // Istanziazione della classe con input utente
     lq = new LifespanQueue<TYPE>(atoi(queue_size), atoi(expiration_time));
 
     pthread_t *p;
@@ -147,16 +159,19 @@ int main()
 
     p = (pthread_t *)malloc((atoi(n_writers) + atoi(n_readers)) * sizeof(pthread_t));
 
+    // Istanziamento dei writers
     for(int i = 0; i < atoi(n_writers); i++) {
         pthread_create(&p[i], NULL, WRITER, NULL);
         usleep(100);
     }
 
+    // Istanziamento dei readers
     for(int i = atoi(n_writers); i < (atoi(n_writers) + atoi(n_readers)); i++) {
         pthread_create(&p[i], NULL, READER, NULL);
         usleep(100);
     }
 
+    // Attesa della fine dei thread
     for(int i = 0; i < atoi(n_writers); i++) {
         pthread_join(p[i], NULL);
     }
