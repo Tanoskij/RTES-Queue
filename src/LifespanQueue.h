@@ -46,14 +46,12 @@ template <class T> class LifespanQueue {
             int previous_tail = this->tail;
 
             for(int index = this->tail; this->count > 0; index = (index + 1) % this->dim) {
-                //cout << "Elapsed: " << chrono::duration_cast<chrono::nanoseconds>(chrono::steady_clock::now() - this->queue[index].time).count() << endl;
 
                 if((chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - this->queue[index].time).count()) < this->expiration_time)
                     break;
                 else {
                     this->tail = (this->tail + 1) % this->dim;
                     this->count--;
-                    //cout << "expired" << endl;
                 }
             }
 
@@ -64,10 +62,10 @@ template <class T> class LifespanQueue {
         // Costruttore
         LifespanQueue(size_t dim, int expiration_time) {
             if(dim < 1)
-                throw logic_error("Invalid dimension");
+                throw logic_error("Invalid dimension.");
             
             if(expiration_time <= 0)
-                throw logic_error("Invalid expiration time");
+                throw logic_error("Invalid expiration time.");
             
             this->dim = dim;
 
