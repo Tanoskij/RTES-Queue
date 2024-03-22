@@ -9,7 +9,7 @@
                 "-g",
                 "${file}",
                 "-o",
-                "/home/tano/RTES-Queue/bin/${fileBasenameNoExtension}"
+                "/home/tano/RTES-Queue/src/bin/${fileBasenameNoExtension}"
             ],
             "options": {
                 "cwd": "${fileDirname}"
