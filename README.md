@@ -11,6 +11,16 @@ All'interno della repository sono presenti 3 file di test che mostrano come ista
 * Test_mixed.cpp: implementazione mista.
 
 ## Esecuzione
+Per la prima esecuzione:
+```bash
+cd src
+make
+```
+Gli eseguibili saranno inseriti nella sottodirectory bin. Quindi:
+```bash
+cd bin
+./[fileName].o
+```
 
 ## Slide
 All'interno della repository è possibile trovare delle slide che illustrano variabili e metodi utilizzati per la creazione della coda.
