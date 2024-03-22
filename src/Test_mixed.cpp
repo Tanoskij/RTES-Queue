@@ -17,7 +17,7 @@ void *WRITER(void *args)
         int mex = rand() % 10;
         //char mex = 'c';
 
-        cout << "Provo ad inserire il messaggio: " << mex << endl;
+        cout << "Trying to push the message: " << mex << endl;
         lq->push(mex);
 
         lq->printQueue();
@@ -34,7 +34,7 @@ void *READER(void *args)
     for (int i = 0; i < 10; i++) {
         usleep(500000 - (rand() % 10000));
         int ret = lq->bPop();
-        cout << "Messaggio prelevato: " << ret << endl;
+        cout << "Message taken: " << ret << endl;
 
         lq->printQueue();
 
@@ -151,7 +151,7 @@ int main()
                 break;
     }
 
-    // Istanziazione della classe con input utente
+    // Istanziamento della classe con input utente
     lq = new LifespanQueue<TYPE>(atoi(queue_size), atoi(expiration_time));
 
     pthread_t *p;
@@ -172,7 +172,7 @@ int main()
     }
 
     // Attesa della fine dei thread
-    for(int i = 0; i < atoi(n_writers); i++) {
+    for(int i = 0; i < (atoi(n_writers) + atoi(n_readers)); i++) {
         pthread_join(p[i], NULL);
     }
 

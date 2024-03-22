@@ -216,6 +216,9 @@ template <class T> class LifespanQueue {
                     index = (index + 1) % this->dim;
                 }
             
+            for(int j = 0; j < 10; j++) cout << "-";
+            cout << endl;
+
             sem_post(&this->mutex);
         }
 };
