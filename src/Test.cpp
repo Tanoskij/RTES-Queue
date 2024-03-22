@@ -14,8 +14,7 @@ void *WRITER(void *args)
 {
     for(int i = 0; i < 10; i++) {
         usleep((rand() % 100000) + 100000);
-        int mex = rand() % 10;
-        //char mex = 'c';
+        TYPE mex = rand() % 10;
 
         cout << "Trying to push the message: " << mex << endl;
         lq->push(mex);
@@ -33,7 +32,7 @@ void *READER(void *args)
 {
     for (int i = 0; i < 10; i++) {
         usleep(500000 - (rand() % 10000));
-        int ret = lq->pop();
+        TYPE ret = lq->pop();
         cout << "Message taken: " << ret << endl;
 
         lq->printQueue();
