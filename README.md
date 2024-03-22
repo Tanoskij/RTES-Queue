@@ -8,7 +8,7 @@ La coda possiede metodi che permettono di sfruttare l'inserimento/estrazione dei
 All'interno della repository sono presenti 3 file di test che mostrano come istanziare la coda ed il funzionamento dei metodi presenti al suo interno:
 * Test.cpp: implementazione con push e pop non bloccanti;
 * Test_b.cpp: implementazione con push e pop bloccanti;
-* Test_mixed.cpp: implementazione mista.
+* Test_mixed.cpp: implementazione mista (in questo caso push non bloccante e pop bloccante).
 
 ## Esecuzione
 Per la prima esecuzione:
