@@ -12,4 +12,4 @@ all: $(TAR)
 	$(CC) $(CFLAG) $< -o $(BINPATH)/$@.o -I $(SRCPATH) -lpthread 2>/dev/null
 
 clean:
-	rm -f *.o
+	rm -f $(BINPATH)/*.o
